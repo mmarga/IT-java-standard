@@ -9,14 +9,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.attribute.standard.RequestingUserName;
+
 
 
 public class EstudianteDao {
 		
 	public int grabar(Estudiante estudiante) throws SQLException {
 		
-		String sql = "insert into estudiante (nombre, apellido, padron) values (? , ? , ?)";
-		
+		String sql = "insert into estudiante (nombre, apellido, padron) values (? , ? , ?)";		
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mavenjdbc", "root", "");
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, estudiante.getNombre());
@@ -56,12 +57,7 @@ public class EstudianteDao {
 		List<Estudiante> estudiantes = new ArrayList<Estudiante>();
 		
 		while (resultSet.next()) {			
-			Estudiante e = new Estudiante();			
-			e.setId_estudiante(resultSet.getInt("id_estudiante"));
-			e.setNombre(resultSet.getString("nombre"));
-			e.setApellido(resultSet.getString("apellido"));
-			e.setPadron(resultSet.getString("padron"));
-			estudiantes.add(e);			
+			estudiantes.add(construir(resultSet));			
 		}
 		
 		return estudiantes;
@@ -78,16 +74,22 @@ public class EstudianteDao {
 		Estudiante estudiante = null;
 		
 		if (resultSet.next()) {
-			estudiante.setId_estudiante(resultSet.getInt(1));
-			estudiante.setNombre(resultSet.getString(2));
-			estudiante.setApellido(resultSet.getString(3));
-			estudiante.setPadron(resultSet.getString(4));
-			
+			estudiante = construir(resultSet); //ver método común a todos
 		}	
 		
 		return estudiante;
 	}
 	
+	//código común a todos los métodos.
+	
+	private Estudiante construir(ResultSet resultSet) throws SQLException {
+		Estudiante estudiante = new Estudiante();
+		estudiante.setId_estudiante(resultSet.getInt(1));
+		estudiante.setNombre(resultSet.getString(2));
+		estudiante.setApellido(resultSet.getString(3));
+		estudiante.setPadron(resultSet.getString(4));
+		return estudiante;
+	}
 	
 	
 }

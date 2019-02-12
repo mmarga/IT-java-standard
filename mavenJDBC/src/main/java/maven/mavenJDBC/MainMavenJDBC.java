@@ -42,6 +42,9 @@ public class MainMavenJDBC {
 		//Estudiante estudiante4 = new Estudiante("Benito", "Musso", "Duce");
 		//estudianteDao2.grabarConId(estudiante4);
 		
+		Estudiante estudiante5 = new Estudiante("Carlos", "peperonchino", "actor");
+		estudianteDao.grabar(estudiante5);
+		estudianteDao.select();
 	
 		
 	}
